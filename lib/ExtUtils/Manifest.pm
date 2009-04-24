@@ -268,7 +268,7 @@ sub skipcheck {
     my @skipped = ();
     foreach my $file (_sort keys %$found){
         if (&$matches($file)){
-            warn "Skipping $file\n";
+            warn "Skipping $file\n" unless $Quiet;
             push @skipped, $file;
             next;
         }
