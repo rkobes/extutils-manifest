@@ -409,13 +409,17 @@ sub maniskip {
     local(*M, $_);
     open M, "< $mfile" or open M, "< $DEFAULT_MSKIP" or return sub {0};
     while (<M>){
-	chomp;
-	s/\r//;
-	next if /^#/;
-	next if /^\s*$/;
-        s/^'//;
-        s/'$//;
-	push @skip, _macify($_);
+      chomp;
+      s/\r//;
+      $_ =~ qr{^\s*(?:(?:'([^\\']*(?:\\.[^\\']*)*)')|([^#\s]\S*))?(?:(?:\s*)|(?:\s+(.*?)\s*))$};
+      #my $comment = $3;
+      my $filename = $2;
+      if ( defined($1) ) { 
+        $filename = $1; 
+        $filename =~ s/\\(['\\])/$1/g;
+      }
+      next if (not defined($filename) or not $filename);
+      push @skip, _macify($filename);
     }
     close M;
     return sub {0} unless (scalar @skip > 0);
