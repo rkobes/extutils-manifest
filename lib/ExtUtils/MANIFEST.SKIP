@@ -49,3 +49,6 @@
 
 # Avoid Devel::Cover files.
 \bcover_db\b
+
+# Avoid MYMETA files
+^MYMETA\.
